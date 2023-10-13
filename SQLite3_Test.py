@@ -1,19 +1,26 @@
 import sqlite3
+import os
+
+# Check if the database file exists, and create it if not
+db_file = 'user_database.db'
+if not os.path.exists(db_file):
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY,
+            username TEXT,
+            email TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
 
 # Connect to the SQLite database
-conn = sqlite3.connect('user_database.db')
+conn = sqlite3.connect(db_file)
 
 # Create a cursor object to interact with the database
 cursor = conn.cursor()
-
-# Create a table to store user information
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY,
-        username TEXT,
-        email TEXT
-    )
-''')
 
 def register_user():
     username = input("Enter username: ")
